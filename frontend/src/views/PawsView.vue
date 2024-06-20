@@ -91,6 +91,7 @@
       id="appointment"
       class="h-full w-full background-dog top-0 flex flex-col lg:flex-row-reverse justify-center items-center"
     >
+      <!-- Left Section -->
       <div
         class="w-full lg:w-2/3 lg:flex justify-center items-center bg-amber-100 h-full px-10 lg:px-36"
       >
@@ -98,29 +99,43 @@
           <h2 class="text-3xl font-bold mb-10 text-gray-900">
             We'll take your dog for a walk. Just tell us when!
           </h2>
+          <div v-if="successMessage" class="text-green-500 mb-5 font-bold">
+            {{ successMessage }}
+          </div>
 
           <div class="flex gap-5 mb-5">
+            <!-- Frequency Buttons -->
             <div class="w-1/2">
               <div>
-                <div>
-                  <p class="text-xs lg:text-sm text-gray-500 mb-2">Select Frequency</p>
-                </div>
-                <div
-                  class="bg-white border botder-gray-200 rounded-md flex justify-between p-1.5 lg:p-1"
+                <p class="text-xs lg:text-sm text-gray-500 mb-2">Select Frequency</p>
+              </div>
+              <div
+                class="bg-white border border-gray-200 rounded-md flex justify-between p-1.5 lg:p-1"
+              >
+                <button
+                  @click="toggleFrequency('recurring')"
+                  :class="{
+                    'bg-amber-300': isRecurring === 'recurring',
+                    'text-gray-600': isRecurring !== 'recurring'
+                  }"
+                  class="focus:outline-none focus:bg-amber-300 px-3 py-1 text-xs lg:text-sm w-1/2 rounded-md"
                 >
-                  <button
-                    class="focus:outline-none focus:bg-amber-300 text-gray-600 px-3 py-1 text-xs lg:text-sm w-1/2 rounded-md"
-                  >
-                    Recurring
-                  </button>
-                  <button
-                    class="focus:outline-none focus:bg-amber-300 text-gray-600 px-3 py-1 text-xs lg:text-sm w-1/2 rounded-md whitespace-nowrap"
-                  >
-                    One Time
-                  </button>
-                </div>
+                  Recurring
+                </button>
+                <button
+                  @click="toggleFrequency('one-time')"
+                  :class="{
+                    'bg-amber-300': isRecurring === 'one-time',
+                    'text-gray-600': isRecurring !== 'one-time'
+                  }"
+                  class="focus:outline-none focus:bg-amber-300 px-3 py-1 text-xs lg:text-sm w-1/2 rounded-md whitespace-nowrap"
+                >
+                  One Time
+                </button>
               </div>
             </div>
+
+            <!-- Date Picker -->
             <div class="w-1/2">
               <div>
                 <p class="text-xs lg:text-sm text-gray-500 mb-2">Select Start Date</p>
@@ -128,7 +143,7 @@
               <VueDatePicker v-model="date" class=""></VueDatePicker>
             </div>
           </div>
-          <!-- days of the week -->
+          <!-- Days of the Week -->
           <div>
             <div>
               <p class="text-xs lg:text-sm text-gray-500 mb-2">Select Days</p>
@@ -147,61 +162,82 @@
                 {{ day }}
               </button>
             </div>
+          </div>
+          <!-- Time Selection -->
+          <div>
             <div>
               <p class="text-xs lg:text-sm text-gray-500 mt-4 mb-2">Select Time</p>
             </div>
             <div class="bg-white rounded-md flex justify-between p-1 px-5">
               <button
+                @click="selectTime('morning')"
+                :class="{
+                  'bg-amber-300': selectedTime === 'morning',
+                  'text-gray-600': selectedTime !== 'morning'
+                }"
                 class="w-full focus:outline-none focus:bg-amber-300 text-gray-600 px-3 py-1 text-xs lg:text-sm rounded-md"
               >
                 Morning
               </button>
               <button
+                @click="selectTime('afternoon')"
+                :class="{
+                  'bg-amber-300': selectedTime === 'afternoon',
+                  'text-gray-600': selectedTime !== 'afternoon'
+                }"
                 class="w-full focus:outline-none focus:bg-amber-300 text-gray-600 px-3 py-1 text-xs lg:text-sm rounded-md"
               >
                 Afternoon
               </button>
               <button
+                @click="selectTime('evening')"
+                :class="{
+                  'bg-amber-300': selectedTime === 'evening',
+                  'text-gray-600': selectedTime !== 'evening'
+                }"
                 class="w-full focus:outline-none focus:bg-amber-300 text-gray-600 px-3 py-1 text-xs lg:text-sm rounded-md"
               >
                 Evening
               </button>
             </div>
-            <div class="mt-4">
-              <div>
-                <p class="text-xs lg:text-sm text-gray-500 mb-2">Note for sitter</p>
-              </div>
-              <textarea
-                name="note"
-                id=""
-                cols="30"
-                rows="5"
-                placeholder="Notes for your sitter"
-                class="w-full p-2 border rounded-md outline-none text-sm lg:text-base"
-              ></textarea>
+          </div>
+
+          <!-- Note for Sitter -->
+          <div class="mt-4">
+            <div>
+              <p class="text-xs lg:text-sm text-gray-500 mb-2">Note for sitter</p>
             </div>
-            <div class="my-5">
-              <button
-                href="#appointment"
-                class="rounded-full p-2 lg:p-3 px-5 lg:px-10 text-sm bg-gray-800 text-white cursor-pointer border border-white hover:bg-gray-900"
-              >
-                Schedule a Visit
-              </button>
-            </div>
+            <textarea
+              v-model="note"
+              name="note"
+              id="note"
+              cols="30"
+              rows="5"
+              placeholder="Notes for your sitter"
+              class="w-full p-2 border rounded-md outline-none text-sm lg:text-base"
+            ></textarea>
+          </div>
+          <!-- Schedule Button -->
+          <div class="my-5">
+            <button
+              @click="CreateAppointment"
+              class="rounded-full p-2 lg:p-3 px-5 lg:px-10 text-sm bg-gray-800 text-white cursor-pointer border border-white hover:bg-gray-900"
+            >
+              Schedule a Visit
+            </button>
           </div>
         </div>
       </div>
+      <!-- Right Section -->
       <div
         class="w-full lg:w-1/3 bg-gray-800 h-full p-5 flex flex-col lg:pt-28 justify-center items-center"
       >
-        <div class="">
+        <div>
           <a href="#" class="flex gap-5 lg:mb-5 justify-center lg:justify-start">
             <img src="@/assets/images/paw-logo.png" class="h-10" alt="Flowbite Logo" />
             <span class="text-3xl font-semibold text-white">Pawtastic</span>
           </a>
-
           <h2 class="text-xl font-bold text-white mb-3 mt-10 lg:mt-20">All services include:</h2>
-
           <ul class="text-gray-300 list-disc list-inside text-sm lg:text-base">
             <li class="my-3 lg:my-10">Photo and video updates</li>
             <li class="my-3 lg:my-10">Notification upon sitter arrival</li>
@@ -216,11 +252,33 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import VueDatePicker from '@vuepic/vue-datepicker'
+import axios from 'axios'
 import '@vuepic/vue-datepicker/dist/main.css'
 
+const isRecurring = ref(true)
 const days = ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun']
 const selectedDays = ref([])
+const date = ref('')
+const selectedTime = ref('')
+const note = ref('')
+const successMessage = ref('')
 
+const toggleFrequency = (isRecurringValue) => {
+  isRecurring.value = isRecurringValue
+}
+
+const selectTime = (time) => {
+  selectedTime.value = time
+}
+
+const displaySuccessMessage = () => {
+  successMessage.value = 'Creation is successful'
+  isRecurring.value = true
+  selectedTime.value = ''
+  selectedDays.value = []
+  date.value = ''
+  note.value = ''
+}
 const toggleDay = (day) => {
   if (selectedDays.value.includes(day)) {
     selectedDays.value = selectedDays.value.filter((selectedDay) => selectedDay !== day)
@@ -229,7 +287,6 @@ const toggleDay = (day) => {
   }
 }
 
-const date = ref()
 const lastScrollY = ref(0)
 const isVisible = ref(true)
 
@@ -246,6 +303,28 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
 })
+
+const CreateAppointment = async () => {
+  try {
+    const daysString = selectedDays.value.join(',')
+
+    const appointmentData = {
+      frequency: isRecurring.value,
+      date: date.value,
+      days: daysString,
+      time: selectedTime.value,
+      note: note.value
+    }
+
+    const response = await axios.post('http://127.0.0.1:8000/api/appointments', appointmentData)
+
+    console.log(response.data)
+
+    displaySuccessMessage()
+  } catch (error) {
+    console.error('Error creating appointment:', error)
+  }
+}
 </script>
 
 <style>

@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@vuepic/vue-datepicker": "^8.8.0",
+    "axios": "^1.7.2",
     "flowbite": "^2.3.0",
     "pinia": "^2.1.7",
     "vue": "^3.4.29",
