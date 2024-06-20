@@ -1,10 +1,10 @@
-<script setup lang="ts">
+<script setup>
 import { RouterLink, RouterView } from 'vue-router'
+import PawsView from '@/views/PawsView.vue'
 </script>
-
 <template>
   <div>
-    <h1>Hello</h1>
+    <PawsView></PawsView>
   </div>
 </template>
 
